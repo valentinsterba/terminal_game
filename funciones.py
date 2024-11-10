@@ -1,4 +1,11 @@
-from variables import jugadores, puntuaciones,preguntas, respuestas, puntos, puntuacion
+import random
+import csv
+from variables import jugadores, puntuaciones, puntos, puntuacion, preguntas_y_respuestas
+
+def selecion_pyr(preguntas_y_respuestas):
+    pyr_seleccionadas = []
+    pyr_seleccionadas = random.sample(preguntas_y_respuestas,10)
+    return pyr_seleccionadas
 
 def menu():
     while True:
@@ -6,8 +13,8 @@ def menu():
         print("1. Jugar")
         print("2. Reglas")
         print("3. Ranking (NO DISPONIBLE)")
-        print("4. Salir")
-        
+        print("4. Salir \n")
+       
         opcion = input("Selecciona una opción: ")
         
         match opcion:
@@ -15,8 +22,9 @@ def menu():
                 jugar()
             case "2":
                 reglas()
+                input("Enter para salir: ")
             case "3":
-                mostrar_ranking()
+                imprimir_ranking(archivo_csv="data.csv")
             case "4":
                 print("Saliendo del juego. ¡Hasta la próxima!")
                 break
@@ -33,9 +41,21 @@ def reglas():
     print("5. Para salir, elija la opción 'Salir' en el menú.")
     print("------------------------------")
 
-def jugar():
+def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
+    with open(archivo_csv, mode="a", newline="") as archivo:
+        escritor_csv = csv.writer(archivo)
+        
+        escritor_csv.writerow([nombre, puntuacion])
     
-    nombre_jugador = input("Cual es tu nombre? ").strip()
+    print(f"Puntuación de {nombre} guardada exitosamente en {archivo_csv}.")
+
+
+
+
+
+def jugar():
+    reso = selecion_pyr(preguntas_y_respuestas)
+    nombre_jugador = input("\nCual es tu nombre? ").strip()
     while nombre_jugador in jugadores:
         print("El nombre está ocupado, por favor elija otro.")
         nombre_jugador = input("¿Cuál es tu nombre? ").strip()
@@ -44,20 +64,21 @@ def jugar():
     puntuaciones[nombre_jugador] = 0
     print(f"¡Preparate {nombre_jugador} que la partida comenzará en breve..!")
     
-    for i in range(len(preguntas)):
-        intentos = 3
+    for i in range(len(reso)):
+        intentos = 1
         respuestas_correctas = 0
         respuestas_ingresadas = []
-        print(f"\nPregunta {i+1}: {preguntas[i]}")
+        print(f"\nPregunta {i+1}: {reso[i][0]}")
 
         while (intentos > 0):
+            num = "R: "
             eleccion = input("Ingrese su respuesta: ")
 
             while (eleccion in respuestas_ingresadas):
                 eleccion = input("Respuesta Ya Ingresada. Ingrese otra: ")
 
-            if buscar_respuesta(respuestas[i], eleccion):
-                puntos_obtenidos = puntaje_respuesta(respuestas,eleccion)
+            if buscar_respuesta(reso[i][1], eleccion):
+                puntos_obtenidos = puntaje_respuesta(reso[i][1],eleccion)
                 puntuaciones[nombre_jugador] += puntos_obtenidos 
                 print(f"¡Respuesta Correcta! Tu puntuación ahora es: {puntuaciones[nombre_jugador]}")
 
@@ -75,14 +96,18 @@ def jugar():
 
                 respuestas_correctas += 1
                 respuestas_ingresadas.append(eleccion)
-                if (respuestas_correctas == len(respuestas[i])):
+                if (respuestas_correctas == len(reso[i][1])):
                     break
             else:
                 print("¡Respuesta Incorrecta!")
+                print("""   """)
                 intentos -= 1
+        for k in range(4):
+            print(num, end=" ")
+            print(reso[i][1][k])
         
-        print(f"Respuestas: {respuestas[i]}")
-    
+    agregar_puntuacion(nombre_jugador, puntuaciones[nombre_jugador])
+
     print(f"Puntuación Final: {puntuaciones[nombre_jugador]}")
     if puntuaciones[nombre_jugador] > 2000:
         print(f"Superaste los 2000 puntos, sos un groso")
@@ -91,20 +116,24 @@ def jugar():
     else: 
         print(f"y... no llegar a los 1000 puntos es un poco triste\npero el intento es lo que cuenta no?...")
         
-    
 
+def imprimir_ranking(archivo_csv="puntuaciones.csv"):
     
+    jugadores = []
+    with open(archivo_csv, mode="r") as archivo:
+        lector_csv = csv.reader(archivo)
 
-def mostrar_ranking():
-    if puntuaciones:
-        print("\nRanking de puntajes: ")
-        ranking_ordenado = sorted(puntuaciones, reverse=True)
-        for puntaje in ranking_ordenado:
-            print(f"{puntaje} puntos")
-    else:
-        print("\nNo hay puntajes registrados aun. Participa para ser el primero en el ranking!")
-        #PROXIMAMENTE ...
-        #EN LA BUILD 2.0
+        for fila in lector_csv:
+            nombre = fila[0]
+            puntuacion = fila[1]
+            jugadores.append((nombre, puntuacion))
+        #sorte ordena, le paso jugadores, (nombre,puntuacion, key=lambda x: x[1], funcion lambda x:toma un elemento x de la lista (una tupla) y devuelve x[1] / (ordena la puntuacion) de manera decreciente con reverse
+    jugadores_ordenados = sorted(jugadores, key=lambda x: x[1], reverse=True)
+    
+    print("Ranking de Jugadores:")
+    for posicion, (nombre, puntuacion) in enumerate(jugadores_ordenados, start=1):
+        print(f"{posicion}. {nombre}: {puntuacion} puntos")
+
 
 
 def buscar_respuesta(respuestas: list[list], respuesta_ingresada: str) -> bool:
@@ -122,11 +151,11 @@ def buscar_respuesta(respuestas: list[list], respuesta_ingresada: str) -> bool:
 
 def puntaje_respuesta(respuestas,eleccion):
     puntuacion = 0
+    
     for i in range(len(respuestas)):
-        for j in range(len(respuestas[i])):
-            if eleccion == respuestas[i][j]:
-                puntuacion += puntos[j]
-            
+        if eleccion == respuestas[i]:
+            puntuacion = puntos[i]
+            break
     return puntuacion
 
 
