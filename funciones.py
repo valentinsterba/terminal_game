@@ -12,7 +12,7 @@ def menu():
         print("\n--- Menú Principal ---")
         print("1. Jugar")
         print("2. Reglas")
-        print("3. Ranking (NO DISPONIBLE)")
+        print("3. Ranking")
         print("4. Salir \n")
        
         opcion = input("Selecciona una opción: ")
@@ -42,12 +42,35 @@ def reglas():
     print("------------------------------")
 
 def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
-    with open(archivo_csv, mode="a", newline="") as archivo:
-        escritor_csv = csv.writer(archivo)
-        
-        escritor_csv.writerow([nombre, puntuacion])
+    import csv
+
+def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
+    datos = []
+    nombre_existente = False
+    with open(archivo_csv, mode="r", newline="") as archivo:
+            lector_csv = csv.reader(archivo)
+            for fila in lector_csv:
+                if fila and fila[0] == nombre:  #solo si existe una fila con data
+                    puntuacion_arch = int(fila[1]) # convierto la puntuacion str a int para comparar
+                    # comparar puntuaciones y actualizar solo si la nueva es mayor si el nombre ya está
+                    if puntuacion > puntuacion_arch:
+                        datos.append([nombre, puntuacion])  # actualizamos su puntuación
+
+                    else:
+                        datos.append(fila)  
+                    nombre_existente = True
+                else:
+                    datos.append(fila)
     
-    print(f"Puntuación de {nombre} guardada exitosamente en {archivo_csv}.")
+    if not nombre_existente:
+        datos.append([nombre, puntuacion])
+
+    with open(archivo_csv, mode="w", newline="") as archivo:
+        escritor_csv = csv.writer(archivo)
+        escritor_csv.writerows(datos)
+    
+    
+
 
 
 
@@ -56,11 +79,7 @@ def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
 def jugar():
     reso = selecion_pyr(preguntas_y_respuestas)
     nombre_jugador = input("\nCual es tu nombre? ").strip()
-    while nombre_jugador in jugadores:
-        print("El nombre está ocupado, por favor elija otro.")
-        nombre_jugador = input("¿Cuál es tu nombre? ").strip()
     
-    jugadores.add(nombre_jugador)
     puntuaciones[nombre_jugador] = 0
     print(f"¡Preparate {nombre_jugador} que la partida comenzará en breve..!")
     
