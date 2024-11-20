@@ -1,6 +1,10 @@
 import random
 import csv
+<<<<<<< HEAD
 from variables import puntuaciones, puntos, preguntas_y_respuestas,jugadores, puntuacion
+=======
+from variables import jugadores, puntuaciones, puntos, puntuacion, preguntas_y_respuestas
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
 
 def selecion_pyr(preguntas_y_respuestas):
     pyr_seleccionadas = []
@@ -22,17 +26,26 @@ def menu():
                 jugar()
             case "2":
                 reglas()
+<<<<<<< HEAD
                 input("\nEnter para salir: ")
             case "3":
                 imprimir_ranking(archivo_csv="data.csv")
                 input("\nEnter para salir: ")
                 
+=======
+                input("Enter para salir: ")
+            case "3":
+                imprimir_ranking(archivo_csv="data.csv")
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
             case "4":
                 print("Saliendo del juego. ¡Hasta la próxima!")
                 break
             case _:
                 print("Opción no válida. Por favor, intenta de nuevo.")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
 def reglas():
     """Función para mostrar las reglas del juego."""
     print("¡100 Programadores Dicen!")
@@ -45,6 +58,12 @@ def reglas():
     print("------------------------------")
 
 def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
+<<<<<<< HEAD
+=======
+    import csv
+
+def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
     datos = []
     nombre_existente = False
     with open(archivo_csv, mode="r", newline="") as archivo:
@@ -69,6 +88,16 @@ def agregar_puntuacion(nombre, puntuacion, archivo_csv="data.csv"):
         escritor_csv = csv.writer(archivo)
         escritor_csv.writerows(datos)
     
+<<<<<<< HEAD
+=======
+    
+
+
+
+
+
+
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
 def jugar():
     reso = selecion_pyr(preguntas_y_respuestas)
     nombre_jugador = input("\nCual es tu nombre? ").strip()
@@ -120,7 +149,11 @@ def jugar():
         
     agregar_puntuacion(nombre_jugador, puntuaciones[nombre_jugador])
 
+<<<<<<< HEAD
     print(f"\nPuntuación Final: {puntuaciones[nombre_jugador]}\n")
+=======
+    print(f"Puntuación Final: {puntuaciones[nombre_jugador]}")
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
     if puntuaciones[nombre_jugador] > 2000:
         print(f"Superaste los 2000 puntos, sos un groso")
     elif 1000 < puntuaciones[nombre_jugador] > 2000:
@@ -128,6 +161,10 @@ def jugar():
     else: 
         print(f"y... no llegar a los 1000 puntos es un poco triste\npero el intento es lo que cuenta no?...")
         
+<<<<<<< HEAD
+=======
+
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
 def imprimir_ranking(archivo_csv="puntuaciones.csv"):
     
     jugadores = []
@@ -141,10 +178,19 @@ def imprimir_ranking(archivo_csv="puntuaciones.csv"):
         #sorte ordena, le paso jugadores, (nombre,puntuacion, key=lambda x: x[1], funcion lambda x:toma un elemento x de la lista (una tupla) y devuelve x[1] / (ordena la puntuacion) de manera decreciente con reverse
     jugadores_ordenados = sorted(jugadores, key=lambda x: x[1], reverse=True)
     
+<<<<<<< HEAD
     print("""--- Ranking ---""")
     for posicion, (nombre, puntuacion) in enumerate(jugadores_ordenados, start=1):
         print(f"{posicion}. {nombre}: {puntuacion} puntos")
 
+=======
+    print("Ranking de Jugadores:")
+    for posicion, (nombre, puntuacion) in enumerate(jugadores_ordenados, start=1):
+        print(f"{posicion}. {nombre}: {puntuacion} puntos")
+
+
+
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
 def buscar_respuesta(respuestas: list[list], respuesta_ingresada: str) -> bool:
     """Busca la respuesta ingresada por el usuario y verifica si existe o no en las respuestas posibles.\n
     Parámetros: respuestas (list[list]), respuesta_ingresada (str).\n
@@ -157,6 +203,10 @@ def buscar_respuesta(respuestas: list[list], respuesta_ingresada: str) -> bool:
     
     return respuesta_encontrada
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
 def puntaje_respuesta(respuestas,eleccion):
     puntuacion = 0
     

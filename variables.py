@@ -19,5 +19,8 @@ preguntas_y_respuestas = [
     ["¿Qué bebida es típica para brindar?", ["Champagne", "Fernet", "Vino", "Cerveza"]],
     ["¿Qué instrumento se asocia al tango?", ["Bandoneon", "Piano", "Guitarra", "Violin"]]]
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 74c8ce75033e1e2178e1feecd5ede6137e238310
